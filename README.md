@@ -4,7 +4,14 @@
 
 ### In a browser
 
-(TBD)
+Download this repo and copy `src/eventbus.js` into your project's JavaScript asset folder.
+Import the instance using ES6 module import.
+
+```js
+import eventBus from '/your_js_assets_folder/eventbus.js';
+```
+
+Your're ready to go.
 
 ## API
 
