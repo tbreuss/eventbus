@@ -5,13 +5,13 @@
 ### In a browser
 
 Download this repo and copy `src/eventbus.js` into your project's JavaScript asset folder.
-Import the instance using ES6 module import.
+Import the class instance using ES6 module import.
 
 ```js
-import eventBus from '/your_js_assets_folder/eventbus.js';
+import EventBus from '/your_js_assets_folder/eventbus.js';
 ```
 
-Your're ready to go.
+You're ready to go.
 
 ## API
 
@@ -21,7 +21,7 @@ Your're ready to go.
 // @type - string
 // @callback - function
 // @scope - the scope where the @callback is defined
-// @...args - additiona arguments
+// @args - pass additional arguments as you like
 EventBus.on(type, callback, scope, ...args)
 ```
 
@@ -54,7 +54,7 @@ EventBus.emit(type, target, ...args)
 
 ### EventBus.`debug`
 
-For debugging purpose, it returns the added listeners.
+For debugging purpose only, it returns the added events as a string.
 
 ```js
 EventBus.debug()
@@ -63,10 +63,10 @@ EventBus.debug()
 ## Usage
 
 ```js
-function myFunction(event) {
-  console.log("myFunction type=" + event.type);
+function myHandler(event) {
+  console.log("myHandler type=" + event.type);
 }
-EventBus.on("my_event", myFunction);
+EventBus.on("my_event", myHandler);
 EventBus.emit("my_event");
 ```
 
