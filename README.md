@@ -78,7 +78,6 @@ class TestClass1 {
         this.className = "TestClass1";
         EventBus.on("callback_event", this.callback, this);
     }
-
     callback(event) {
         console.log(this.className + " / type: " + event.type + " / dispatcher: " + event.target.className);
     }
@@ -88,7 +87,6 @@ class TestClass2 {
     constructor() {
         this.className = "TestClass2";
     }
-
     dispatch() {
         EventBus.emit("callback_event", this);
     }
