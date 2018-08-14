@@ -73,67 +73,98 @@ EventBus.emit("my_event");
 ## Keeping the scope
 
 ```js
-var TestClass1 = function() {
-  this.className = "TestClass1";
-  this.callback = function(event) {
-    console.log(this.className + " = type:" + event.type + " / dispatcher:" + event.target.className);
-  }
-};
-var TestClass2 = function() {
-  this.className = "TestClass2";
-  this.dispatch = function() {
-    EventBus.emit("callback_event", this);
-  }
-};
-var t1 = new TestClass1();
-var t2 = new TestClass2();
-EventBus.on("callback_event", t1.callback, t1);
+class TestClass1 {
+    constructor() {
+        this.className = "TestClass1";
+        EventBus.on("callback_event", this.callback, this);
+    }
+
+    callback(event) {
+        console.log(this.className + " / type: " + event.type + " / dispatcher: " + event.target.className);
+    }
+}
+
+class TestClass2 {
+    constructor() {
+        this.className = "TestClass2";
+    }
+
+    dispatch() {
+        EventBus.emit("callback_event", this);
+    }
+}
+
+let t1 = new TestClass1();
+let t2 = new TestClass2();
 t2.dispatch();
 ```
 
 ## Passing additional parameters
 
 ```js
-var TestClass1 = function() {
-  this.className = "TestClass1";
-  this.doSomething = function(event, param1, param2) {
-    console.log(this.className + ".doSomething");
-    console.log("type=" + event.type);
-    console.log("params=" + param1 + param2);
-    console.log("coming from=" + event.target.className);
-  }
-};
-var TestClass2 = function() {
-  this.className = "TestClass2";
-  this.ready = function() {
-    EventBus.emit("custom_event", this, "javascript events", " are really useful");
-  }
-};
+class TestClass1 {
+    constructor() {
+        this.className = "TestClass1";
+        EventBus.on("custom_event", this.doSomething, this);
+    }
+    doSomething(event, param1, param2) {
+        console.log(this.className + ".doSomething");
+        console.log("type=" + event.type);
+        console.log("params=" + param1 + param2);
+        console.log("coming from=" + event.target.className);
+    }
+}
 
-var t1 = new TestClass1();
-var t2 = new TestClass2();
+class TestClass2 {
+    constructor() {
+        this.className = "TestClass2";
+    }
+    ready() {
+        EventBus.emit("custom_event", this, "javascript events", " are really useful");
+    }
+}
 
-EventBus.on("custom_event", t1.doSomething, t1);
+let t1 = new TestClass1();
+let t2 = new TestClass2();
+
 t2.ready();
 ```
 
 ## Example of usage EventBus.off
 
-To remove EventListener you have to pass the same callback instance
+To remove EventListener you have to pass the same callback instance.
+
+This is wrong and won't work because callback functions are different functions.
 
 ```js
-/* Wrong - callback functions are different instances */
 EventBus.on('EXAMPLE_EVENT', function() {
     console.log('example callback');
 });
 EventBus.off('EXAMPLE_EVENT', function() {
     console.log('example callback');
 });
+```
 
-/* Correct - callback function is the same instance */
+This is correct. Our callback function is the same function.
+
+```js
 var handler = function() {
     console.log('example callback');
 };
 EventBus.on('EXAMPLE_EVENT', handler);
+EventBus.emit('EXAMPLE_EVENT');
 EventBus.off('EXAMPLE_EVENT', handler);
+// Not emitted since event was removed
+EventBus.emit('EXAMPLE_EVENT');
 ```
+
+## Examples
+
+To run the examples you have to start a webserver at the root of this repository.
+
+For example the built in PHP server:
+
+    $ cd eventbus
+    $ php -S localhost:9999
+    
+Now, open <http://localhost:9999/examples/> in your browser.    
