@@ -57,7 +57,7 @@ EventBus.emit(type, target, ...args)
 For debugging purpose only, it returns the added events as a string.
 
 ```js
-EventBus.debug()
+console.log(EventBus.debug());
 ```
 
 ## Usage
