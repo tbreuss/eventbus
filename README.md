@@ -130,7 +130,7 @@ t2.ready();
 
 ## Example of usage EventBus.off
 
-To remove EventListener you have to pass the same callback instance.
+To remove an event handler you have to pass the same callback instance.
 
 This is wrong and won't work because callback functions are different functions.
 
