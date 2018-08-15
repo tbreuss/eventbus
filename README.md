@@ -128,7 +128,7 @@ let t2 = new TestClass2();
 t2.ready();
 ```
 
-## Example of usage EventBus.off
+## Using EventBus.off
 
 To remove an event handler you have to pass the same callback instance.
 
