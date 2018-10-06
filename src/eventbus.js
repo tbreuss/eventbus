@@ -5,61 +5,63 @@ class EventBus {
     }
 
     on(type, callback, scope, ...args) {
-        if (typeof this.events[type] == "undefined") {
+        if (typeof this.events[type] === "undefined") {
             this.events[type] = [];
         }
-        this.events[type].push({scope: scope, callback: callback, args: args});
+        this.events[type].push({scope, callback, args});
     }
 
     off(type, callback, scope) {
-        if (typeof this.events[type] == "undefined") {
+        if (typeof this.events[type] === "undefined") {
             return;
         }
-        let numOfCallbacks = this.events[type].length;
-        let newArray = [];
-        for (let i = 0; i < numOfCallbacks; i++) {
-            let event = this.events[type][i];
-            if (event.scope == scope && event.callback == callback) {
 
-            } else {
+        let newArray = [];
+        for (const event of this.events[type]) {
+            const isSame = event.scope == scope && event.callback == callback;
+            if (!isSame) {
                 newArray.push(event);
             }
         }
+
         this.events[type] = newArray;
     }
 
     has(type, callback, scope) {
-        if (typeof this.events[type] == "undefined") {
+        if (typeof this.events[type] === "undefined") {
             return false;
         }
+
         let numOfCallbacks = this.events[type].length;
         if (callback === undefined && scope === undefined) {
             return numOfCallbacks > 0;
         }
-        for (let i = 0; i < numOfCallbacks; i++) {
-            let event = this.events[type][i];
-            if ((scope ? event.scope == scope : true) && event.callback == callback) {
-                return true;
-            }
+
+        for (const event of this.events[type]) {
+            const scopeIsSame = scope ? event.scope == scope : true;
+            const callbackIsSame = event.callback == callback;
+            return scopeIsSame && callbackIsSame;
         }
+
         return false;
     }
 
     emit(type, target, ...args) {
-        if (typeof this.events[type] == "undefined") {
+        if (typeof this.events[type] === "undefined") {
             return;
         }
+
         let bag = {
             type: type,
             target: target
         };
+        
         args = [bag].concat(args);
-        let events = this.events[type].slice();
-        let numOfCallbacks = events.length;
-        for (let i = 0; i < numOfCallbacks; i++) {
-            let event = events[i];
+        const events = this.events[type].slice();
+
+        for (const event of events) {
             if (event && event.callback) {
-                let concatArgs = args.concat(event.args);
+                const concatArgs = args.concat(event.args);
                 event.callback.apply(event.scope, concatArgs);
             }
         }
@@ -67,10 +69,8 @@ class EventBus {
 
     debug() {
         let str = "";
-        for (let type in this.events) {
-            let numOfCallbacks = this.events[type].length;
-            for (let i = 0; i < numOfCallbacks; i++) {
-                let event = this.events[type][i];
+        for (const type in this.events) {
+            for (const event of this.events[type]) {
                 let className = "Anonymous";
                 if (event.scope) {
                     if (event.scope.constructor.name) {
