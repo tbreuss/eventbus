@@ -61,7 +61,9 @@ class EventBus {
         for (const event of this.events[type]) { // Iterate all events of the passed type
             const scopeIsSame = scope ? event.scope == scope : true; // Check if scope is equal to the one passed
             const callbackIsSame = event.callback == callback; // Check if callback is equal to the one passed
-            return scopeIsSame && callbackIsSame; // Check if current event and passed event are equal
+            if (scopeIsSame && callbackIsSame) { // Check if current event and passed event are equal
+                return true; // If so, break loop and return true
+            }
         }
 
         return false; // If there aren't any events it cannot match
