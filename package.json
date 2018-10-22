@@ -1,0 +1,12 @@
+{
+  "name": "eventbus",
+  "description": "Simple ES6-ready class for managing events in JavaScript",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c --watch"
+  },
+  "devDependencies": {
+    "rollup": "^0.66.6",
+    "rollup-plugin-terser": "^3.0.0"
+  }
+}
