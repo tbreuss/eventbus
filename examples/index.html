@@ -8,15 +8,15 @@
 
 <script type="module">
 
-    import EventBus from '/dist/eventbus.esm.js';
+    import {global as globalBus} from '/dist/eventbus.esm.js';
 
     // Simple example
     {
         function myHandler(event) {
             console.log("myHandler / type: " + event.type);
         }
-        EventBus.on("my_event", myHandler);
-        EventBus.emit("my_event");
+        globalBus.on("my_event", myHandler);
+        globalBus.emit("my_event");
     }
 
     // Keeping the scope
@@ -24,7 +24,7 @@
         class TestClass1 {
             constructor() {
                 this.className = "TestClass1";
-                EventBus.on("callback_event", this.callback, this);
+                globalBus.on("callback_event", this.callback, this);
             }
 
             callback(event) {
@@ -38,7 +38,7 @@
             }
 
             dispatch() {
-                EventBus.emit("callback_event", this);
+                globalBus.emit("callback_event", this);
             }
         }
 
@@ -52,7 +52,7 @@
         class TestClass1 {
             constructor() {
                 this.className = "TestClass1";
-                EventBus.on("custom_event", this.doSomething, this);
+                globalBus.on("custom_event", this.doSomething, this);
             }
             doSomething(event, param1, param2) {
                 console.log(this.className + ".doSomething");
@@ -67,7 +67,7 @@
                 this.className = "TestClass2";
             }
             ready() {
-                EventBus.emit("custom_event", this, "javascript events", " are really useful");
+                globalBus.emit("custom_event", this, "javascript events", " are really useful");
             }
         }
 
@@ -78,18 +78,18 @@
     }
 
     // Debugging
-    console.log(EventBus.debug());
+    console.log(globalBus.debug());
 
     // Removing a registered handler
     {
         var handler = function() {
             console.log('example callback');
         };
-        EventBus.on('EXAMPLE_EVENT', handler);
-        EventBus.emit('EXAMPLE_EVENT');
-        EventBus.off('EXAMPLE_EVENT', handler);
+        globalBus.on('EXAMPLE_EVENT', handler);
+        globalBus.emit('EXAMPLE_EVENT');
+        globalBus.off('EXAMPLE_EVENT', handler);
         // Not emitted because event was removed
-        EventBus.emit('EXAMPLE_EVENT');
+        globalBus.emit('EXAMPLE_EVENT');
     }
 </script>
 </body>

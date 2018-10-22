@@ -1,4 +1,4 @@
-class EventBus {
+export class EventBus {
 
     constructor() {
         this.events = {};
@@ -114,4 +114,4 @@ class EventBus {
 
 };
 
-export default new EventBus();
+export const global = new EventBus();

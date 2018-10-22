@@ -113,6 +113,6 @@ class EventBus {
     }
 
 }
-var eventbus = new EventBus();
+const global = new EventBus();
 
-export default eventbus;
+export { EventBus, global };

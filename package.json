@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c --watch",
-    "test": "ava --serial"
+    "test": "ava"
   },
   "devDependencies": {
     "ava": "1.0.0-rc.1",
