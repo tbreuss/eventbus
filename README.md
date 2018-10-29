@@ -8,7 +8,7 @@ Download this repo and copy `src/eventbus.js` into your project's JavaScript ass
 Import the class instance using ES6 module import.
 
 ```js
-import EventBus from '/your_js_assets_folder/eventbus.js';
+import { global as EventBus } from '/your_js_assets_folder/eventbus.js';
 ```
 
 You're ready to go.

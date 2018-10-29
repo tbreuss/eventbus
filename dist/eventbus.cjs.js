@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 class EventBus {
 
     constructor() {
@@ -115,6 +117,7 @@ class EventBus {
     }
 
 }
-var eventbus = new EventBus();
+const global = new EventBus();
 
-module.exports = eventbus;
+exports.EventBus = EventBus;
+exports.global = global;
