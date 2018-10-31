@@ -29,16 +29,9 @@ export class EventBus {
             return; // If not just return
         }
 
-        let newArray = []; // Array that will contain all events except the one removed
-        for (const event of this.events[type]) { // Iterate all events of the specified type
-            // Check if the event of the current iteration and the passed one are equal
-            const isSame = event.scope == scope && event.callback == callback;
-            if (!isSame) { // If they are not the same...
-                newArray.push(event); // ...push the current event to the newArray
-            }
-        }
-
-        this.events[type] = newArray; // Reset the events array with all events except the removed one
+        // keep all elements that aren't equal to the passed event
+        const filterFn = event => event.scope !== scope || event.callback !== callback;
+        this.events[type] = this.events[type].filter(filterFn);
     }
 
     /**
@@ -58,15 +51,14 @@ export class EventBus {
             return numOfCallbacks > 0; // If there are any callbacks we can be sure it matches the passed one
         }
 
-        for (const event of this.events[type]) { // Iterate all events of the passed type
-            const scopeIsSame = scope ? event.scope == scope : true; // Check if scope is equal to the one passed
-            const callbackIsSame = event.callback == callback; // Check if callback is equal to the one passed
+        const conditionFn = event => {
+            const scopeIsSame = scope ? event.scope === scope : true; // Check if scope is equal to the one passed
+            const callbackIsSame = event.callback === callback; // Check if callback is equal to the one passed
             if (scopeIsSame && callbackIsSame) { // Check if current event and passed event are equal
                 return true; // If so, break loop and return true
             }
-        }
-
-        return false; // If there aren't any events it cannot match
+        };
+        return this.events[type].some(conditionFn);
     }
 
     /**
@@ -80,38 +72,28 @@ export class EventBus {
             return; // If not, quit method
         }
 
-        let bag = {
-            type: type,
-            target: target
-        };
-        
-        args = [bag].concat(args); // Merge arrays
+        let bag = {type, target};
+
         const events = this.events[type].slice(); // Little hack to clone array
 
         for (const event of events) { // Iterate all events
-            if (event && event.callback) { // Check if callback of event is set 
-                const concatArgs = args.concat(event.args); // Add args that were passed
-                event.callback.apply(event.scope, concatArgs); // Call callback
+            if (event && event.callback) { // Check if callback of event is set
+                event.callback.apply(event.scope, [bag, ...args, ...event.args]); // Call callback
             }
         }
     }
 
     debug() {
         let str = "";
-        for (const type in this.events) {
-            for (const event of this.events[type]) {
-                let className = "Anonymous";
-                if (event.scope) {
-                    if (event.scope.constructor.name) {
-                        className = event.scope.constructor.name;
-                    }
-                }
+        for (const [type, events] of Object.entries(this.events)) {
+            for (const event of events) {
+                let className = event.scope && event.scope.constructor.name || "Anonymous";
                 str += `${className} listening for "${type}"\n`;
             }
         }
         return str;
     }
 
-};
+}
 
 export const global = new EventBus();
