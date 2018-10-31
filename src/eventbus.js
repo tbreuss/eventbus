@@ -30,7 +30,8 @@ class EventBus {
         }
 
         // keep all elements that aren't equal to the passed event
-        this.events[type] = this.events[type].filter(event => event.scope !== scope || event.callback !== callback);
+        const filterFn = event => event.scope !== scope || event.callback !== callback;
+        this.events[type] = this.events[type].filter(filterFn);
     }
 
     /**
@@ -50,13 +51,14 @@ class EventBus {
             return numOfCallbacks > 0; // If there are any callbacks we can be sure it matches the passed one
         }
 
-        return this.events[type].some(event => {
+        const conditionFn = event => {
             const scopeIsSame = scope ? event.scope === scope : true; // Check if scope is equal to the one passed
             const callbackIsSame = event.callback === callback; // Check if callback is equal to the one passed
             if (scopeIsSame && callbackIsSame) { // Check if current event and passed event are equal
                 return true; // If so, break loop and return true
             }
-        });
+        };
+        return this.events[type].some(conditionFn);
     }
 
     /**
