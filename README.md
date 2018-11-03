@@ -1,4 +1,4 @@
-# Simple ES6-ready class for managing events in JavaScript
+# :bus: Simple ES6-ready class for managing events in JavaScript
 
 ## Installation
 
