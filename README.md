@@ -165,4 +165,6 @@ For example the built in PHP server:
     $ cd eventbus
     $ php -S localhost:9999
     
-Now, open <http://localhost:9999/examples/> in your browser.    
+Now, open <http://localhost:9999/examples/> in your browser.
+
+In the Console of Chrome DevTools you should see a few log entries.
